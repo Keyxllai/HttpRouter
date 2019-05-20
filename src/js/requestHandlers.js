@@ -2,6 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function start() {
     console.log('RequestHandler start was called');
+    function sleep(milliSeconds) {
+        var startTime = new Date().getTime();
+        while (new Date().getTime() < startTime + milliSeconds)
+            ;
+    }
+    sleep(10000);
     return "Hello Start";
 }
 exports.start = start;
