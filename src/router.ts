@@ -1,11 +1,14 @@
+import { ServerResponse } from "http";
 
-export function route(handle:any, pathName:string){
+export function route(handle:any, pathName:string, rsp: ServerResponse){
     console.log('route for pathname:'+pathName);
     if(typeof handle[pathName] === 'function'){
-        return handle[pathName]();
+        handle[pathName](rsp);
     }
     else{
         console.log('No request handle for '+ pathName)
-        return "404 Not Found"
+        rsp.writeHead(404,{"Content-Type":"text/plain"});
+        rsp.write('404 Not Found');
+        rsp.end();
     }
 }

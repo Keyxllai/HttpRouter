@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function route(handle, pathName) {
+function route(handle, pathName, rsp) {
     console.log('route for pathname:' + pathName);
     if (typeof handle[pathName] === 'function') {
-        return handle[pathName]();
+        handle[pathName](rsp);
     }
     else {
         console.log('No request handle for ' + pathName);
-        return "404 Not Found";
+        rsp.writeHead(404, { "Content-Type": "text/plain" });
+        rsp.write('404 Not Found');
+        rsp.end();
     }
 }
 exports.route = route;

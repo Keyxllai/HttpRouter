@@ -14,13 +14,13 @@ function start(route, handle) {
         // 请注意，可能会输出两次“request received.”。
         // 那是因为大部分服务器都会在你访问 http://localhost:8888/ 时尝试读取 http://localhost:8888/favicon.ico 
         var pathname = url.parse(req.url).pathname;
-        var content = route(handle, pathname);
+        route(handle, pathname, rsp);
         console.log('request received. PathName:' + pathname);
-        rsp.writeHead(200, { "Content-Type": "text/plain" });
-        rsp.write(content);
-        rsp.end();
+        // rsp.writeHead(200,{"Content-Type":"text/plain"});
+        // rsp.write(content);
+        // rsp.end();
     }
     http.createServer(onRequest).listen(8888);
-    console.log('Server started .');
+    console.log('Server has started.');
 }
 exports.start = start;
