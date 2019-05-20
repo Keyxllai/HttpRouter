@@ -6,6 +6,6 @@ let handle = {};
 handle["/"] = requestHandler.start;
 handle["/start"] = requestHandler.start;
 handle["/upload"] = requestHandler.upload;
-handle["/download"] = requestHandler.upload;
+handle["/download"] = requestHandler.download;
 
 server.start(router.route, handle);
