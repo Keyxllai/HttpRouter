@@ -14,7 +14,7 @@ export function start(route:any, handle:any){
 
         console.log('request received. PathName:' + pathname);
         
-        req.setEncoding('utf8');
+        req.setEncoding('utf8'); //设置接受数据编码格式为UTF-8
         
         req.addListener('data',function(chunk:any){
             postBody += chunk;

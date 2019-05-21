@@ -1,0 +1,28 @@
+{
+  "name": "httprouter",
+  "version": "1.0.0",
+  "description": "NodeJS Demo Project",
+  "main": "index.js",
+  "dependencies": {
+    "formidable": "^1.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^10.14.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Keyxllai/HttpRouter.git"
+  },
+  "keywords": [
+    "TS"
+  ],
+  "author": "Lai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Keyxllai/HttpRouter/issues"
+  },
+  "homepage": "https://github.com/Keyxllai/HttpRouter#readme"
+}
