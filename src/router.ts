@@ -1,9 +1,9 @@
 import { ServerResponse } from "http";
 
-export function route(handle:any, pathName:string, rsp: ServerResponse){
+export function route(handle:any, pathName:string, rsp: ServerResponse, postData: any){
     console.log('route for pathname:'+pathName);
     if(typeof handle[pathName] === 'function'){
-        handle[pathName](rsp);
+        handle[pathName](rsp, postData);
     }
     else{
         console.log('No request handle for '+ pathName)

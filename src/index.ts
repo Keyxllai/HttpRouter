@@ -7,5 +7,6 @@ handle["/"] = requestHandler.start;
 handle["/start"] = requestHandler.start;
 handle["/upload"] = requestHandler.upload;
 handle["/download"] = requestHandler.download;
+handle["/index"] = requestHandler.index;
 
 server.start(router.route, handle);

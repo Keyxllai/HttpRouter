@@ -8,7 +8,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var child = __importStar(require("child_process"));
-function start(rsp) {
+var querystring = __importStar(require("querystring"));
+function start(rsp, postBody) {
     console.log('RequestHandler start was called');
     var content = 'empty';
     child.exec("find /", { timeout: 10000, maxBuffer: 20000 * 1024 }, function (error, stdout, stderr) {
@@ -19,14 +20,34 @@ function start(rsp) {
     return content;
 }
 exports.start = start;
-function upload(rsp) {
+function index(rsp, postBody) {
+    console.log('Index be called');
+    var body = '<html>' +
+        '<head>' +
+        '<meta http-equiv="Content-Type" content="text/html; ' +
+        'charset=UTF-8" />' +
+        '</head>' +
+        '<body>' +
+        '<form action="/upload" method="post">' +
+        '<textarea name="text" rows="20" cols="60"></textarea>' +
+        '<br/>' +
+        '<input type="submit" value="Submit text" />' +
+        '</form>' +
+        '</body>' +
+        '</html>';
+    rsp.writeHead(200, { "Content-Type": "text/html" });
+    rsp.write(body);
+    rsp.end();
+}
+exports.index = index;
+function upload(rsp, postBody) {
     console.log('RequestHandler upload was called');
     rsp.writeHead(200, { "Content-Type": "text/plain" });
-    rsp.write('Hello Upload');
+    rsp.write("U send body: " + querystring.parse(postBody).text);
     rsp.end();
 }
 exports.upload = upload;
-function download(rsp) {
+function download(rsp, postBody) {
     console.log('RequestHandler download was called');
     rsp.writeHead(200, { "Content-Type": "text/plain" });
     rsp.write('Hello Download');

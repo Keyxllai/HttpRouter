@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function route(handle, pathName, rsp) {
+function route(handle, pathName, rsp, postData) {
     console.log('route for pathname:' + pathName);
     if (typeof handle[pathName] === 'function') {
-        handle[pathName](rsp);
+        handle[pathName](rsp, postData);
     }
     else {
         console.log('No request handle for ' + pathName);

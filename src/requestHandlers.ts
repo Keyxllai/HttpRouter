@@ -1,8 +1,9 @@
 import * as child from "child_process";
+import * as querystring from "querystring";
 import { ServerResponse } from "http";
 
 
-export function start(rsp:ServerResponse){
+export function start(rsp:ServerResponse, postBody:any){
     console.log('RequestHandler start was called');
 
     let content = 'empty';
@@ -16,14 +17,35 @@ export function start(rsp:ServerResponse){
     return content;
 }
 
-export function upload(rsp:ServerResponse){
-    console.log('RequestHandler upload was called');
-    rsp.writeHead(200,{"Content-Type":"text/plain"});
-    rsp.write('Hello Upload');
+export function index(rsp: ServerResponse, postBody:any){
+    console.log('Index be called');
+
+    var body ='<html>'+
+    '<head>'+
+    '<meta http-equiv="Content-Type" content="text/html; '+
+    'charset=UTF-8" />'+
+    '</head>'+
+    '<body>'+
+    '<form action="/upload" method="post">'+
+    '<textarea name="text" rows="20" cols="60"></textarea>'+
+    '<br/>'+
+    '<input type="submit" value="Submit text" />'+
+    '</form>'+
+    '</body>'+
+    '</html>';
+    rsp.writeHead(200,{"Content-Type":"text/html"});
+    rsp.write(body);
     rsp.end();
 }
 
-export function download(rsp:ServerResponse){
+export function upload(rsp:ServerResponse, postBody:any){
+    console.log('RequestHandler upload was called');
+    rsp.writeHead(200,{"Content-Type":"text/plain"});
+    rsp.write("U send body: " + querystring.parse(postBody).text);
+    rsp.end();
+}
+
+export function download(rsp:ServerResponse, postBody:any){
     console.log('RequestHandler download was called');
     rsp.writeHead(200,{"Content-Type":"text/plain"});
     rsp.write('Hello Download');
