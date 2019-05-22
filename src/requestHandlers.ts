@@ -1,5 +1,6 @@
 import * as child from "child_process";
 import * as querystring from "querystring";
+import * as fs from "fs";
 import { ServerResponse } from "http";
 
 
@@ -50,4 +51,19 @@ export function download(rsp:ServerResponse, postBody:any){
     rsp.writeHead(200,{"Content-Type":"text/plain"});
     rsp.write('Hello Download');
     rsp.end();
+}
+
+export function show(rsp:ServerResponse, postBody:any){
+    fs.readFile("/tmp/1.jpg","binary",function(err,data){
+        if(err){
+            rsp.writeHead(500,{"Content-Type":"text/plain"});
+            rsp.write(err + '\n');
+            rsp.end();
+        }
+        else{
+            rsp.writeHead(200,{"Content-Type":"image/jpg"});
+            rsp.write(data,"binary");
+            rsp.end();
+        }
+    })
 }

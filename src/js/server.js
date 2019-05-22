@@ -16,7 +16,7 @@ function start(route, handle) {
         var pathname = url.parse(req.url ? req.url.toString() : '').pathname;
         var postBody = '';
         console.log('request received. PathName:' + pathname);
-        req.setEncoding('utf8');
+        req.setEncoding('utf8'); //设置接受数据编码格式为UTF-8
         req.addListener('data', function (chunk) {
             postBody += chunk;
             console.log('Received POST body [' + chunk + "].");

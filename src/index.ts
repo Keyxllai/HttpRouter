@@ -8,5 +8,6 @@ handle["/start"] = requestHandler.start;
 handle["/upload"] = requestHandler.upload;
 handle["/download"] = requestHandler.download;
 handle["/index"] = requestHandler.index;
+handle["/show"] = requestHandler.show;
 
 server.start(router.route, handle);

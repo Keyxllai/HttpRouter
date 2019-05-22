@@ -9,6 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var child = __importStar(require("child_process"));
 var querystring = __importStar(require("querystring"));
+var fs = __importStar(require("fs"));
 function start(rsp, postBody) {
     console.log('RequestHandler start was called');
     var content = 'empty';
@@ -54,3 +55,18 @@ function download(rsp, postBody) {
     rsp.end();
 }
 exports.download = download;
+function show(rsp, postBody) {
+    fs.readFile("/tmp/1.jpg", "binary", function (err, data) {
+        if (err) {
+            rsp.writeHead(500, { "Content-Type": "text/plain" });
+            rsp.write(err + '\n');
+            rsp.end();
+        }
+        else {
+            rsp.writeHead(200, { "Content-Type": "image/jpg" });
+            rsp.write(data, "binary");
+            rsp.end();
+        }
+    });
+}
+exports.show = show;
