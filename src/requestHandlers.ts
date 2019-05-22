@@ -1,10 +1,11 @@
 import * as child from "child_process";
 import * as querystring from "querystring";
 import * as fs from "fs";
-import { ServerResponse } from "http";
+import * as formidable from "formidable";
+import { ServerResponse,IncomingMessage } from "http";
 
 
-export function start(rsp:ServerResponse, postBody:any){
+export function start(rsp:ServerResponse, req:IncomingMessage){
     console.log('RequestHandler start was called');
 
     let content = 'empty';
@@ -18,7 +19,7 @@ export function start(rsp:ServerResponse, postBody:any){
     return content;
 }
 
-export function index(rsp: ServerResponse, postBody:any){
+export function index(rsp: ServerResponse){
     console.log('Index be called');
 
     var body ='<html>'+
@@ -27,10 +28,10 @@ export function index(rsp: ServerResponse, postBody:any){
     'charset=UTF-8" />'+
     '</head>'+
     '<body>'+
-    '<form action="/upload" method="post">'+
-    '<textarea name="text" rows="20" cols="60"></textarea>'+
-    '<br/>'+
-    '<input type="submit" value="Submit text" />'+
+    '<form action="/upload" enctype="multipart/form-data" '+
+    'method="post">'+
+    '<input type="file" name="upload" multiple="multiple">'+
+    '<input type="submit" value="Upload file" />'+
     '</form>'+
     '</body>'+
     '</html>';
@@ -39,11 +40,26 @@ export function index(rsp: ServerResponse, postBody:any){
     rsp.end();
 }
 
-export function upload(rsp:ServerResponse, postBody:any){
+export function upload(rsp:ServerResponse, req:IncomingMessage){
     console.log('RequestHandler upload was called');
-    rsp.writeHead(200,{"Content-Type":"text/plain"});
-    rsp.write("U send body: " + querystring.parse(postBody).text);
-    rsp.end();
+    
+    var form = new formidable.IncomingForm();
+    console.log("about to parse");
+    form.parse(req,function(error,fields,files){
+        console.log("parsing done");
+        if(error){
+            rsp.writeHead(500,{"Content-Type":"text/plain"});
+            rsp.write(error + '\n');
+            rsp.end();
+        }else{
+            fs.renameSync(files.upload.path,"tmp/1.jpg")
+            rsp.writeHead(200,{"Content-Type":"text/html"});
+            rsp.write("received image:<br/>");
+            rsp.write("<img src='/show' />");
+            rsp.end();
+        }
+    })
+    
 }
 
 export function download(rsp:ServerResponse, postBody:any){

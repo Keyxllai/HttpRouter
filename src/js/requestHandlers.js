@@ -8,9 +8,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var child = __importStar(require("child_process"));
-var querystring = __importStar(require("querystring"));
 var fs = __importStar(require("fs"));
-function start(rsp, postBody) {
+var formidable = __importStar(require("formidable"));
+function start(rsp, req) {
     console.log('RequestHandler start was called');
     var content = 'empty';
     child.exec("find /", { timeout: 10000, maxBuffer: 20000 * 1024 }, function (error, stdout, stderr) {
@@ -21,7 +21,7 @@ function start(rsp, postBody) {
     return content;
 }
 exports.start = start;
-function index(rsp, postBody) {
+function index(rsp) {
     console.log('Index be called');
     var body = '<html>' +
         '<head>' +
@@ -29,10 +29,10 @@ function index(rsp, postBody) {
         'charset=UTF-8" />' +
         '</head>' +
         '<body>' +
-        '<form action="/upload" method="post">' +
-        '<textarea name="text" rows="20" cols="60"></textarea>' +
-        '<br/>' +
-        '<input type="submit" value="Submit text" />' +
+        '<form action="/upload" enctype="multipart/form-data" ' +
+        'method="post">' +
+        '<input type="file" name="upload" multiple="multiple">' +
+        '<input type="submit" value="Upload file" />' +
         '</form>' +
         '</body>' +
         '</html>';
@@ -41,11 +41,25 @@ function index(rsp, postBody) {
     rsp.end();
 }
 exports.index = index;
-function upload(rsp, postBody) {
+function upload(rsp, req) {
     console.log('RequestHandler upload was called');
-    rsp.writeHead(200, { "Content-Type": "text/plain" });
-    rsp.write("U send body: " + querystring.parse(postBody).text);
-    rsp.end();
+    var form = new formidable.IncomingForm();
+    console.log("about to parse");
+    form.parse(req, function (error, fields, files) {
+        console.log("parsing done");
+        if (error) {
+            rsp.writeHead(500, { "Content-Type": "text/plain" });
+            rsp.write(error + '\n');
+            rsp.end();
+        }
+        else {
+            fs.renameSync(files.upload.path, "tmp/1.jpg");
+            rsp.writeHead(200, { "Content-Type": "text/html" });
+            rsp.write("received image:<br/>");
+            rsp.write("<img src='/show' />");
+            rsp.end();
+        }
+    });
 }
 exports.upload = upload;
 function download(rsp, postBody) {

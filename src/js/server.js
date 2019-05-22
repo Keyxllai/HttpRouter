@@ -22,7 +22,7 @@ function start(route, handle) {
             console.log('Received POST body [' + chunk + "].");
         });
         req.addListener('end', function () {
-            route(handle, pathname, rsp, postBody);
+            route(handle, pathname, rsp, req);
         });
     }
     http.createServer(onRequest).listen(8888);

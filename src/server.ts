@@ -22,7 +22,7 @@ export function start(route:any, handle:any){
         });
 
         req.addListener('end', function(){
-            route(handle, pathname, rsp, postBody);
+            route(handle, pathname, rsp, req);
         });
     }
     
