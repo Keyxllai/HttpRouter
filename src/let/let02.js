@@ -38,3 +38,33 @@ var obj2 ={
 // { name: 'Update obj2 first SUCCESS', log: [Function: log] }
 // { name: 'Update obj2 first SUCCESS', log: [Function: log] }
 obj2.log();
+
+// Step 3:
+
+// 如何解决上面的问题，避免this指向不同的对象
+// 方法
+// 利用by reference方式，在function前面加一行 var self = this; self和this会指向同一个位置， this原来指向obj3，所有self同样会指向obj3
+
+var obj3 ={
+	name: "I'm obj3",	
+	log: function(){
+        var self = this;
+        self.name = "Update obj3 first SUCCESS",//修改this.name
+        console.log(self); 
+        
+        updateName = function(newName){
+            self.name = newName;
+        }
+
+        updateName("Update obj3 Second SUCCESS");
+
+        console.log(self);
+	}
+}
+
+// 结果
+// { name: 'Update obj3 first SUCCESS', log: [Function: log] }
+// { name: 'Update obj3 Second SUCCESS', log: [Function: log] }
+// Update obj3 Second SUCCESS
+obj3.log();
+console.log(obj3.name);
