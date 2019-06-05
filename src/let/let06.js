@@ -5,8 +5,15 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 
 var app = express();
-app.use(bodyParser.json());     //解析JSON格式
-app.use(bodyParser.urlencoded());   //解析文本格式
+app.use(bodyParser.json({
+    limit: '5000mb'
+}));     //解析JSON格式
+app.use(bodyParser.urlencoded({
+    limit: '5000mb',
+    extended: true
+}));   //解析文本格式
+
+app.use(cors());
 
 app.set('port',1300);
 
