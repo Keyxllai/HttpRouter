@@ -1,11 +1,27 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan")
+const FileStreamRotator = require("file-stream-rotator");
+const fs = require("fs");
+const path = require('path');
+
+logDir = path.join(__dirname,"log");
 
 const productRouters = require("./api/routers/products");
 const orderRouters = require("./api/routers/orders");
 
-app.use(morgan("dev"));
+fs.existsSync(logDir) || fs.mkdirSync(logDir);
+
+//var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'});
+morgan.format('dev', '[order] :method :url :status :response-time ms - :res[content-length]');
+
+var accessLogStream = FileStreamRotator.getStream({
+    date_format:"YYYYMMDD",
+    filename:path.join(logDir,"access-%DATE%.log"),
+    frequency:"daily",
+    verbose:false
+});
+app.use(morgan("dev",{stream: accessLogStream}));
 
 app.use('/products', productRouters);
 app.use('/orders', orderRouters);
