@@ -5,6 +5,10 @@ const FileStreamRotator = require("file-stream-rotator");
 const fs = require("fs");
 const path = require('path');
 
+var bodyParser = require("body-parser");
+// 跨域
+var cors = require("cors");
+
 logDir = path.join(__dirname,"log");
 
 const productRouters = require("./api/routers/products");
@@ -22,6 +26,16 @@ var accessLogStream = FileStreamRotator.getStream({
     verbose:false
 });
 app.use(morgan("dev",{stream: accessLogStream}));
+
+app.use(bodyParser.json({
+    limit: '5000mb'
+}));     //解析JSON格式
+app.use(bodyParser.urlencoded({
+    limit: '5000mb',
+    extended: true
+}));   //解析文本格式
+
+app.use(cors);
 
 app.use('/products', productRouters);
 app.use('/orders', orderRouters);

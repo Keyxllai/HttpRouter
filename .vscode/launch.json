@@ -31,7 +31,7 @@
             "type": "node",
             "request": "launch",
             "name": "Debuge Order",
-            "program": "${workspaceFolder}\\order\\app.js",
+            "program": "${workspaceFolder}\\order\\server.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]
