@@ -27,7 +27,7 @@ router.post('/', (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         price: req.body.price
-    })
+    });
 
     product
         .save()
@@ -44,7 +44,7 @@ router.post('/', (req, res, next) => {
                 success: false
             })
         });
-})
+});
 
 router.get('/:id', (req, res, next) => {
     let pid = req.params.id;
@@ -65,6 +65,49 @@ router.get('/:id', (req, res, next) => {
                 success: false
             });
         });
-})
+});
+
+router.delete('/:id', (req, res, next) => {
+    const id = req.params.id;
+    Product.remove({
+            _id: id
+        })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                result: result
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                success: false,
+                error: err
+            });
+        });
+});
+
+router.put('/:id', (req, res, next) => {
+    const id = req.params.id;
+    const updateOps = {};
+    // for (let ops of req.body) {
+    //     updateOps[ops.propName] = ops.value;
+    // }
+
+    Product.update({_id: id}, {$set: {name: req.body.name, price: req.body.price}})
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                result: result
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                success: false,
+                error: err
+            });
+        });
+});
 
 module.exports = router;
