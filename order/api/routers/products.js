@@ -5,11 +5,23 @@ const router = express.Router();
 const Product = require("../models/product");
 router.get('/', (req, res, next) => {
     Product.find()
+        .select('name price _id')
         .exec()
         .then(result => {
             res.status(200).json({
                 success: true,
-                result: result
+                count: result.length,
+                result: result.map(doc => {
+                    return {
+                        Name: doc.name,
+                        Price: doc.price,
+                        Id: doc._id,
+                        Request: {
+                            type: "GET",
+                            URL: "http://localhost:3000/products/" + doc._id
+                        }
+                    }
+                })
             })
         })
         .catch(err => {
@@ -49,11 +61,16 @@ router.post('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
     let pid = req.params.id;
     Product.findById(pid)
+        .select('name price _id')
         .exec()
         .then(doc => {
             console.log(doc);
             res.status(200).json({
-                result: doc,
+                result: {
+                    Name: doc.name,
+                    Price: doc.price,
+                    Id: doc._id
+                },
                 success: true
             });
         })
@@ -89,12 +106,14 @@ router.delete('/:id', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
     const id = req.params.id;
-    const updateOps = {};
-    // for (let ops of req.body) {
-    //     updateOps[ops.propName] = ops.value;
-    // }
-
-    Product.update({_id: id}, {$set: {name: req.body.name, price: req.body.price}})
+    Product.update({
+            _id: id
+        }, {
+            $set: {
+                name: req.body.name,
+                price: req.body.price
+            }
+        })
         .exec()
         .then(result => {
             res.status(200).json({
