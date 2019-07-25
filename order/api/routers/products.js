@@ -3,12 +3,23 @@ const mongoose = require("mongoose");
 const router = express.Router();
 
 const Product = require("../models/product");
-
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: "Hello GET Products"
-    })
-})
+    Product.find()
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                success: true,
+                result: result
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+                success: false
+            });
+        });
+});
 
 router.post('/', (req, res, next) => {
 
@@ -21,23 +32,39 @@ router.post('/', (req, res, next) => {
     product
         .save()
         .then(result => {
-            console.log(result);
+            res.status(200).json({
+                success: true,
+                result: result
+            })
         })
-        .catch(err => console.log(err));
-
-    res.status(200).json({
-        message: "Hello POST Products",
-        product: product
-    })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+                success: false
+            })
+        });
 })
 
 router.get('/:id', (req, res, next) => {
     let pid = req.params.id;
-    console.log(pid);
-    res.status(200).json({
-        id: pid,
-        message: "Hello GET Products"
-    })
+    Product.findById(pid)
+        .exec()
+        .then(doc => {
+            console.log(doc);
+            res.status(200).json({
+                result: doc,
+                success: true
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                result: null,
+                error: err,
+                success: false
+            });
+        });
 })
 
 module.exports = router;
