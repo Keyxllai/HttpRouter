@@ -4,7 +4,7 @@ const morgan = require("morgan")
 const FileStreamRotator = require("file-stream-rotator");
 const fs = require("fs");
 const path = require('path');
-
+const mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 // 跨域
 var cors = require("cors");
@@ -13,6 +13,8 @@ logDir = path.join(__dirname,"log");
 
 const productRouters = require("./api/routers/products");
 const orderRouters = require("./api/routers/orders");
+
+mongoose.connect("mongodb+srv://root:root@dc01-odxsr.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true })
 
 fs.existsSync(logDir) || fs.mkdirSync(logDir);
 
@@ -35,7 +37,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));   //解析文本格式
 
-app.use(cors);
+//app.use(cors);
 
 app.use('/products', productRouters);
 app.use('/orders', orderRouters);
