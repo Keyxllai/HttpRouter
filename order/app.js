@@ -14,7 +14,8 @@ logDir = path.join(__dirname,"log");
 const productRouters = require("./api/routers/products");
 const orderRouters = require("./api/routers/orders");
 
-mongoose.connect("mongodb+srv://root:root@dc01-odxsr.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true })
+//mongoose.connect("mongodb+srv://root:root@dc01-odxsr.mongodb.net/test?retryWrites=true&w=majority",{ useNewUrlParser: true })
+mongoose.connect("mongodb://127.0.0.1:27017/Order?retryWrites=true&w=majority",{ useNewUrlParser: true })
 
 fs.existsSync(logDir) || fs.mkdirSync(logDir);
 
@@ -32,6 +33,7 @@ app.use(morgan("dev",{stream: accessLogStream}));
 app.use(bodyParser.json({
     limit: '5000mb'
 }));     //解析JSON格式
+
 app.use(bodyParser.urlencoded({
     limit: '5000mb',
     extended: true
